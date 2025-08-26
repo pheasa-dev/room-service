@@ -1,0 +1,17 @@
+
+# config to database with mongodb (url)
+spring:
+  application:
+    name: room-service
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/room
+  main:
+    allow-circular-references: true
+
+# for log level
+logging:
+  level:
+    root: INFO
+    com.room service: DEBUG
+    org.springframework.web: ERROR
