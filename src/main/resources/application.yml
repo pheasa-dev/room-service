@@ -8,6 +8,9 @@ spring:
       uri: mongodb://localhost:27017/room
   main:
     allow-circular-references: true
+    banner-mode: console
+  banner:
+    location: static/banar.txt
 
 # for log level
 logging:

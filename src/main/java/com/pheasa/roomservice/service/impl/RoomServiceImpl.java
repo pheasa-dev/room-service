@@ -12,6 +12,7 @@ import com.pheasa.roomservice.service.RoomService;
 import com.pheasa.roomservice.util.RoomCriteriaBuilder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
@@ -68,16 +69,23 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     public Flux<RoomDTO> getRoomByFilter(RoomFilterDTO filterDTO) {
-        Query query = RoomCriteriaBuilder.build(filterDTO);
-        return roomCustomRepository.findByFilter(query).map(roomMapper::toRoomDTO);
+        Criteria criteria = RoomCriteriaBuilder.build(filterDTO);
+        return roomCustomRepository.findByFilter(new Query(criteria))
+                .map(roomMapper::toRoomDTO);
     }
 
     @Override
     public Mono<PageDTO<RoomDTO>> getRoomByFilterPagination(RoomFilterDTO filterDTO) {
-        Query query = RoomCriteriaBuilder.build(filterDTO);
-        Flux<RoomDTO> contentFlux = roomCustomRepository.findByFilter(query).map(roomMapper::toRoomDTO);
-        Mono<Long> countMono = roomCustomRepository.coundByFilter(query);
+        Criteria criteria = RoomCriteriaBuilder.build(filterDTO);
+        Mono<Long> countMono = roomCustomRepository.coundByFilter(new Query(criteria));
 
+        Query query = new Query(criteria)
+                .skip((long) filterDTO.getPage() * filterDTO.getSize())
+                .limit(filterDTO.getSize());
+        query.with(RoomCriteriaBuilder.sort(filterDTO));
+
+        Flux<RoomDTO> contentFlux = roomCustomRepository.findByFilter(query)
+                .map(roomMapper::toRoomDTO);
         return Mono.zip(countMono, contentFlux.collectList()).map(tuple -> {
             long total = tuple.getT1();
             List<RoomDTO> content = tuple.getT2();

@@ -13,6 +13,12 @@ public class RoomFilterDTO {
 	private Double priceMax;
 	private Double priceMin;
 	private String priceOp;
+
 	private Integer size = 10;
 	private Integer page = 0;
+
+    @Schema(description = "Sort By filed name (e.g: name,floor)", example = "name")
+    private String sortBy;
+    @Schema(description = "Sort direction: asc or desc", example = "name")
+    private String direction;
 }
