@@ -1,5 +1,7 @@
 package com.pheasa.roomservice.util;
 
+import java.util.List;
+
 public final class RoomConstants {
     private RoomConstants() {
     }
@@ -15,4 +17,7 @@ public final class RoomConstants {
     public static final String OP_GT = "gt";
     public static final String OP_GTE = "gte";
     public static final String OP_EQ = "eq";
+
+    //sort allowlist
+    public static final List<String> ALLOWED_SORT_FIELD = List.of("name","price", "floor");
 }
