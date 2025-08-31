@@ -22,16 +22,13 @@ public class RoomCriteriaBuilder {
         if (Objects.nonNull(filter.getName())) {
             criterias.add(Criteria.where(FIELD_NAME).is(filter.getName()));
         }
-
         if (Objects.nonNull(filter.getFloor())) {
             // criteria.and(FIELD_FLOOR).is(filter.getFloor());
             criterias.add(Criteria.where(FIELD_NAME).is(filter.getName()));
         }
-
         if (Objects.nonNull(filter.getFloor())) {
             criterias.add(Criteria.where(FIELD_FLOOR).is(filter.getFloor()));
         }
-
         if (Objects.nonNull(filter.getPrice()) && Objects.nonNull(filter.getPriceOp())) {
             switch (filter.getPriceOp()) {
                 case OP_LT -> criterias.add(Criteria.where(FIELD_PRICE).lt(filter.getPrice()));
@@ -46,7 +43,6 @@ public class RoomCriteriaBuilder {
         }
         return criterias.isEmpty() ? new Criteria() : new Criteria().andOperator(criterias.toArray(new Criteria[0]));
     }
-
     public static Sort sort(RoomFilterDTO filter) {
 
         Sort.Direction direction = "desc".equalsIgnoreCase(filter.getDirection()) ? Sort.Direction.DESC : Sort.Direction.ASC;
@@ -55,7 +51,6 @@ public class RoomCriteriaBuilder {
         if (!ALLOWED_SORT_FIELD.contains(sortField)) {
             throw new IllegalArgumentException("Invalid sort field: " + sortField);
         }
-
         if (!sortField.equals(FIELD_NAME)) {
             sortField = ATT + sortField;
         }
