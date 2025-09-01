@@ -21,8 +21,7 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import static org.assertj.core.api.Assertions.as;
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.*;
 import static reactor.core.publisher.Mono.when;
 
 @ExtendWith(SpringExtension.class)
@@ -171,7 +170,7 @@ class RoomServiceApplicationTests {
     }
 
 //    @Test
-//    public void sort_withValidFieldASC() {
+//    void sort_withValidFieldASC() {
 //        //given
 //        RoomFilterDTO filter = new RoomFilterDTO();
 //        filter.setDirection("asc");
@@ -182,6 +181,41 @@ class RoomServiceApplicationTests {
 //        assertThat(sort.getOrderFor("attributes.price")).isNotNull();
 //        assertThat(sort.getOrderFor("attributes.price").getDirection())
 //                .isEqualTo(Sort.Direction.ASC);
-//
 //    }
+
+    @Test
+    void sort_withInvalideField_throwException() {
+        //given
+        RoomFilterDTO filter = new RoomFilterDTO();
+        filter.setDirection("asc");
+        filter.setSortBy("type"); // type is invalid field
+        //when
+        //Sort sort = RoomCriteriaBuilder.sort(filter);
+        assertThatThrownBy(() -> RoomCriteriaBuilder.sort(filter))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Invalid sort field");
+    }
+
+    @Test
+    void sort_withDefaulValue() {
+        //given
+        RoomFilterDTO filter = new RoomFilterDTO(); //no sortByOrDirection
+        Sort sort = RoomCriteriaBuilder.sort(filter);
+        //when
+        assertThat(sort.getOrderFor("name")).isNotNull();
+        assertThat(sort.getOrderFor("name").getDirection())
+                .isEqualTo(Sort.Direction.ASC);
+    }
+
+    @Test
+    void sort_withDirectionDESC() {
+        //given
+        RoomFilterDTO filter = new RoomFilterDTO(); //no sortByOrDirection
+        filter.setDirection("desc");
+        Sort sort = RoomCriteriaBuilder.sort(filter);
+        //when
+        assertThat(sort.getOrderFor("name")).isNotNull();
+        assertThat(sort.getOrderFor("name").getDirection())
+                .isEqualTo(Sort.Direction.DESC);
+    }
 }

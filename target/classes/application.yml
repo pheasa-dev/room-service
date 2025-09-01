@@ -6,6 +6,7 @@ spring:
   data:
     mongodb:
       uri: mongodb://localhost:27017/room
+#config banner with html
   main:
     allow-circular-references: true
     banner-mode: console
