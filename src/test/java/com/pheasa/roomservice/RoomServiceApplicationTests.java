@@ -21,6 +21,10 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static reactor.core.publisher.Mono.when;
 
@@ -61,8 +65,22 @@ class RoomServiceApplicationTests {
     }
     @Test
     void shoudReturnEmptyCrituria_whenNoFilterProvided(){
+        //given
         RoomFilterDTO filter = new RoomFilterDTO();
+        //when
         Criteria criteria = RoomCriteriaBuilder.build(filter);
+        //then
         assertThat(criteria.getCriteriaObject().isEmpty());
+    }
+    @Test
+    void shouldAddNameCriterai_whenNameProvided(){
+        //given
+        RoomFilterDTO filter = new RoomFilterDTO();
+        filter.setName("Luxury Room");
+        //when
+        Criteria criteria = RoomCriteriaBuilder.build(filter);
+        String json = criteria.getCriteriaObject().toJson();
+        //then
+        assertThat(json).contains("name","Luxury Room");
     }
 }
