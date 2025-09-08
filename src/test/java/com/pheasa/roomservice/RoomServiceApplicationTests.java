@@ -20,6 +20,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import com.pheasa.roomservice.service.impl.RoomServiceImpl;
 
 import static org.assertj.core.api.Assertions.*;
 import static reactor.core.publisher.Mono.when;
@@ -195,7 +196,6 @@ class RoomServiceApplicationTests {
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("Invalid sort field");
     }
-
     @Test
     void sort_withDefaulValue() {
         //given
