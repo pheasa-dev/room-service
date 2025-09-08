@@ -28,12 +28,12 @@ public class DefaultProblemDetailFactory implements ProblemDetailFactory {
 
     @Override
     public ProblemDetail create(HttpStatus status, String message, String errorCode, ServerWebExchange exchange) {
-        ProblemDetail pd = ProblemDetail.forStatusAndDetail(status, message);
-        pd.setTitle(status.getReasonPhrase());
-        pd.setProperty("timestamp", Instant.now());
-        pd.setProperty("path", exchange.getRequest().getPath().value());
-        pd.setProperty("errorCode", errorCode);
-        pd.setProperty("service", "room-service");
-        return pd;
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(status, message);
+        problemDetail.setTitle(status.getReasonPhrase());
+        problemDetail.setProperty("timestamp", Instant.now());
+        problemDetail.setProperty("path", exchange.getRequest().getPath().value());
+        problemDetail.setProperty("errorCode", errorCode);
+        problemDetail.setProperty("service", "room-service");
+        return problemDetail;
     }
 }
